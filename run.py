@@ -42,10 +42,9 @@ def scroll_page():
             break
 
 
-def login(username: str):
+def login(username: str, password: str):
     username_input = BROWSER.find_element(By.CSS_SELECTOR, "input[name='username']")
     password_input = BROWSER.find_element(By.CSS_SELECTOR, "input[name='password']")
-    password = getpass.getpass('Ingrese la contraseña: ')
     username_input.send_keys(username)
     password_input.send_keys(password)
     sleep(2)
@@ -53,10 +52,10 @@ def login(username: str):
     login_button.click()
 
 
-def run_searcher(username: str):
+def run_searcher(username: str, password: str):
     BROWSER.get('https://www.instagram.com/')
     sleep(2)
-    login(username)
+    login(username, password)
     sleep(15)
     list_followers = get_followers(username)
     list_following = get_following(username)
@@ -67,9 +66,10 @@ def run_searcher(username: str):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-u", "--username", help="Username to login", required=True)
+    password = getpass.getpass('Ingrese la contraseña: ')
 
     args = parser.parse_args()
-    run_searcher(args.username)
+    run_searcher(args.username, args.password)
 
 
 if __name__ == "__main__":
