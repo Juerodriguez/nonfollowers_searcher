@@ -69,7 +69,7 @@ def main():
     password = getpass.getpass('Ingrese la contraseña: ')
 
     args = parser.parse_args()
-    run_searcher(args.username, args.password)
+    run_searcher(args.username, password)
 
 
 if __name__ == "__main__":
