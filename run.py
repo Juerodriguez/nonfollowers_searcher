@@ -2,9 +2,10 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
+import getpass
 import argparse
 
-BROWSER = webdriver.Firefox()
+BROWSER = webdriver.Chrome()
 BROWSER.implicitly_wait(5)
 
 
@@ -41,20 +42,22 @@ def scroll_page():
             break
 
 
-def login(username: str, password: str):
+def login(username: str):
     username_input = BROWSER.find_element(By.CSS_SELECTOR, "input[name='username']")
     password_input = BROWSER.find_element(By.CSS_SELECTOR, "input[name='password']")
+    password = getpass.getpass('Ingrese la contraseña: ')
     username_input.send_keys(username)
     password_input.send_keys(password)
+    sleep(2)
     login_button = BROWSER.find_element(By.CSS_SELECTOR, "button[type='submit']")
     login_button.click()
 
 
-def run_searcher(username: str, password: str):
+def run_searcher(username: str):
     BROWSER.get('https://www.instagram.com/')
     sleep(2)
-    login(username, password)
-    sleep(5)
+    login(username)
+    sleep(15)
     list_followers = get_followers(username)
     list_following = get_following(username)
     nonfollowers = set(list_following) - set(list_followers)
@@ -64,10 +67,9 @@ def run_searcher(username: str, password: str):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-u", "--username", help="Username to login", required=True)
-    parser.add_argument("-p", "--password", help="Password to login", required=True)
 
     args = parser.parse_args()
-    run_searcher(args.username, args.password)
+    run_searcher(args.username)
 
 
 if __name__ == "__main__":
